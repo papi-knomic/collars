@@ -41,7 +41,8 @@ Route::group(['middleware' => ['json']], function () {
 
         //admin prefix
         Route::prefix('admin')->group( function () {
-            Route::get('/job-type', [JobTypeController::class]);
+            Route::get('/job-type', [JobTypeController::class, 'index']);
+            Route::post('/job-type', [JobTypeController::class, 'store']);
         });
 
         //logout

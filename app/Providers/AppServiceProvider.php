@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Job;
+use App\Models\JobType;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Worker;
+use App\Observers\JobObserver;
+use App\Observers\JobTypeObserver;
 use App\Observers\ProductObserver;
 use App\Observers\UserObserver;
 use App\Observers\WorkerObserver;
@@ -32,5 +36,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         User::observe(UserObserver::class);
+        Job::observe( JobObserver::class );
+        JobType::observe( JobTypeObserver::class );
     }
 }
