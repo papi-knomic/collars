@@ -30,7 +30,8 @@ class RegisterUserRequest extends FormRequest
             'password' => 'required|string|confirmed',
             'role' => 'required|string',
             'location' => 'required|string',
-            'job_type' => 'string'
+            'job_type' => 'string',
+            'is_admin' => 'boolean'
         ];
     }
 }

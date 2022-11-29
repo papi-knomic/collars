@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Models\Product;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class UserObserver
 {
@@ -15,6 +17,19 @@ class UserObserver
     public function created(User $user)
     {
         //
+    }
+
+    /**
+     * Handle the Product "creating" event.
+     *
+     * @param  \App\Models\User  $product
+     * @return void
+     */
+    public function creating(User $user)
+    {
+        if ( empty($user->is_admin) ) {
+            $user->is_admin = false;
+        }
     }
 
     /**

@@ -37,6 +37,11 @@ Route::group(['middleware' => ['json']], function () {
             Route::get('/profile', [AuthController::class, 'profile']);
         });
 
+        //admin prefix
+        Route::prefix('admin')->group( function () {
+            Route::get('/job-type', []);
+        });
+
         //logout
         Route::post('/logout', [AuthController::class, 'logout']);
     });

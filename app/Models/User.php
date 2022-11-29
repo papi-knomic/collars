@@ -24,7 +24,8 @@ class User extends Authenticatable
         'password',
         'location',
         'role',
-        'job_type'
+        'job_type',
+        'is_admin'
     ];
 
     /**
