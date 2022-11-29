@@ -41,8 +41,14 @@ Route::group(['middleware' => ['json']], function () {
 
         //admin prefix
         Route::prefix('admin')->group( function () {
+            //get all job types
             Route::get('/job-type', [JobTypeController::class, 'index']);
+            //create job type
             Route::post('/job-type', [JobTypeController::class, 'store']);
+            //update job type
+            Route::put('/job-type/{jobType}', [JobTypeController::class, 'update']);
+            //delete job type
+            Route::delete('/job-type/{jobType}', [JobTypeController::class, 'delete']);
         });
 
         //logout

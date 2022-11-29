@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateJobTypeRequest;
+use App\Models\JobType;
 use App\Repositories\JobTypeRepository;
 use App\Traits\Response;
 use Illuminate\Http\Request;
@@ -30,5 +31,20 @@ class JobTypeController extends Controller
         }
         $jobTypes = $this->jobTypeRepository->getAll();
         return  Response::successResponseWithData($jobTypes, 'Job types gotten', 201 );
+    }
+
+    public function update(CreateJobTypeRequest $request, JobType $jobType) {
+        if ( !auth()->user()->is_admin ){
+            return Response::errorResponse('You are not an admin');
+        }
+        $formFields = $request->validated();
+        $job =  $this->jobTypeRepository->update($jobType->id, $formFields);
+
+        return  Response::successResponseWithData($job, 'Product updated');
+    }
+
+    public function delete( JobType $jobType) {
+        $this->jobTypeRepository->delete($jobType->id);
+        return  Response::successResponse('Job Type deleted');
     }
 }

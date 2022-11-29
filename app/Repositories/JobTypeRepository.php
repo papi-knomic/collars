@@ -13,18 +13,21 @@ class JobTypeRepository implements JobTypeInterface
         return JobType::create($data);
     }
 
-    public function update(array $data)
+    public function update(int $id, array $data)
     {
-        // TODO: Implement update() method.
+        $jobType = JobType::find($id);
+        $jobType->update($data);
+        return $jobType;
     }
 
-    public function delete(array $data)
+    public function delete(int $id)
     {
-        // TODO: Implement delete() method.
+        return JobType::find($id)->delete();
     }
 
     public function getAll()
     {
-        return JobType::orderBy('id')->paginate(10);
+//        return JobType::orderBy('id')->paginate(10);
+        return JobType::get();
     }
 }
