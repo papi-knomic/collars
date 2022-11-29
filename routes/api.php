@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobTypeController;
 use App\Traits\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,7 +41,7 @@ Route::group(['middleware' => ['json']], function () {
 
         //admin prefix
         Route::prefix('admin')->group( function () {
-            Route::get('/job-type', []);
+            Route::get('/job-type', [JobTypeController::class]);
         });
 
         //logout
