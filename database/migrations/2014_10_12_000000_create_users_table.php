@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('location');
             $table->string('role');
             $table->foreignId('job_type')->nullable()->references('id')->on('job_types')->onDelete('cascade');
+            $table->boolean('is_admin');
             $table->rememberToken();
             $table->timestamps();
         });
