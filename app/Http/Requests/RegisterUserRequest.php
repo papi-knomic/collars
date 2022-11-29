@@ -13,7 +13,7 @@ class RegisterUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,8 @@ class RegisterUserRequest extends FormRequest
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed',
             'role' => 'required|string',
-            'location' => 'required|string'
+            'location' => 'required|string',
+            'job_type' => 'required|string',
         ];
     }
 }
