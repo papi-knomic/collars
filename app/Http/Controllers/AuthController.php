@@ -31,7 +31,7 @@ class AuthController extends Controller
     public function register( RegisterUserRequest $request ): JsonResponse
     {
         $fields = $request->validated();
-        if( $fields['role'] != 'user' && empty( $fields['job_type'] ) ){
+        if( $fields['role'] == 'worker' && empty( $fields['job_type'] ) ){
             return Response::errorResponse('Worker accounts must have job type');
         }
         $user = $this->userRepository->create($fields);
@@ -55,5 +55,18 @@ class AuthController extends Controller
             return Response::successResponseWithData($data, 'Login successful', 200, $accessToken);
         }
         return Response::errorResponse('Invalid Login credentials', 400);
+    }
+
+    /**
+     * Deletes current access token of user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout( Request $request ): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return Response::successResponse('Logged out successfully');
     }
 }
