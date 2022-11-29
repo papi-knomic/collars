@@ -69,4 +69,11 @@ class AuthController extends Controller
 
         return Response::successResponse('Logged out successfully');
     }
+
+    public function profile( Request $request ): JsonResponse
+    {
+        $accessToken = Auth::user()->createToken(env('TOKEN'))->plainTextToken;
+        $data = auth()->user();
+        return Response::successResponseWithData($data, 'Profile data gotten', 200, $accessToken);
+    }
 }

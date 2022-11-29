@@ -32,7 +32,10 @@ Route::group(['middleware' => ['json']], function () {
 
     //protected routes
     Route::group(['middleware' => ['auth:sanctum']], function () {
-
+        Route::prefix('account')->group(function () {
+            //create
+            Route::get('/profile', [AuthController::class, 'profile']);
+        });
 
         //logout
         Route::post('/logout', [AuthController::class, 'logout']);
