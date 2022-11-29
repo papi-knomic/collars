@@ -29,4 +29,12 @@ Route::group(['middleware' => ['json']], function () {
     Route::post('/register', [AuthController::class, 'register']);
     //login
     Route::post('/login', [AuthController::class, 'login']);
+
+    //protected routes
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+
+
+        //logout
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
 });

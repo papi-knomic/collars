@@ -31,6 +31,9 @@ class AuthController extends Controller
     public function register( RegisterUserRequest $request ): JsonResponse
     {
         $fields = $request->validated();
+        if( $fields['role'] != 'user' && empty( $fields['job_type'] ) ){
+            return Response::errorResponse('Worker accounts must have job type');
+        }
         $user = $this->userRepository->create($fields);
 
         return Response::successResponseWithData($user, 'Successful!, check your mail for verification code' );
