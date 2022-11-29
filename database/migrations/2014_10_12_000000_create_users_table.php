@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('location');
             $table->string('role');
-            $table->string('job_type')->nullable();
+            $table->foreignId('job_type')->nullable()->references('id')->on('job_types')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
