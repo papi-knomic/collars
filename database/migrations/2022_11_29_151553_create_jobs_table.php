@@ -22,6 +22,8 @@ class CreateJobsTable extends Migration
             $table->float('price_range_min', 20, 3);
             $table->float('price_range_max', 20, 3);
             $table->string('status');
+            $table->text('images');
+            $table->text('slug');
             $table->timestamps();
 
         });
