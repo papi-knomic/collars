@@ -39,6 +39,13 @@ Route::group(['middleware' => ['json']], function () {
             Route::get('/profile', [AuthController::class, 'profile']);
         });
 
+        Route::prefix('jobs')->group( function () {
+            //get
+            Route::get('/', [ JobController::class, 'index' ] );
+            Route::post('/', [JobController::class, 'store']);
+        });
+
+
         //admin prefix
         Route::prefix('admin')->group( function () {
             //get all job types

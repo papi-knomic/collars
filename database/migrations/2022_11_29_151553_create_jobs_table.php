@@ -19,10 +19,10 @@ class CreateJobsTable extends Migration
             $table->string('description');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('job_id')->references('id')->on('job_types')->onDelete('cascade');
-            $table->float('price_range_min', 20, 3);
-            $table->float('price_range_max', 20, 3);
+            $table->float('price_range_min', 20);
+            $table->float('price_range_max', 20);
             $table->string('status');
-            $table->text('images');
+            $table->text('images')->nullable();
             $table->text('slug');
             $table->timestamps();
 

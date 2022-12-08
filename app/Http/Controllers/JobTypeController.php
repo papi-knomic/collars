@@ -30,7 +30,7 @@ class JobTypeController extends Controller
             return Response::errorResponse('You are not an admin');
         }
         $jobTypes = $this->jobTypeRepository->getAll();
-        return  Response::successResponseWithData($jobTypes, 'Job types gotten', 201 );
+        return  Response::successResponseWithData($jobTypes, 'Job types gotten');
     }
 
     public function update(CreateJobTypeRequest $request, JobType $jobType) {
@@ -40,11 +40,14 @@ class JobTypeController extends Controller
         $formFields = $request->validated();
         $job =  $this->jobTypeRepository->update($jobType->id, $formFields);
 
-        return  Response::successResponseWithData($job, 'Product updated');
+        return  Response::successResponseWithData($job, 'Product updated', 201);
     }
 
     public function delete( JobType $jobType) {
+        if ( !auth()->user()->is_admin ){
+            return Response::errorResponse('You are not an admin');
+        }
         $this->jobTypeRepository->delete($jobType->id);
-        return  Response::successResponse('Job Type deleted');
+        return  Response::successResponse('Job Type deleted', 201);
     }
 }
