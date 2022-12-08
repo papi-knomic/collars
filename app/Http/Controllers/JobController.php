@@ -24,6 +24,14 @@ class JobController extends Controller
         return Response::successResponseWithData( $jobs, 'Jobs gotten');
     }
 
+    public function show( Job $job ) {
+        if ( !$job ) {
+            return Response::errorResponse('Job not found');
+        }
+
+        return Response::successResponseWithData( $job );
+    }
+
     public function store( CreateJobRequest $request ): JsonResponse
     {
         $fields = $request->validated();
