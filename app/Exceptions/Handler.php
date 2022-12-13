@@ -2,7 +2,11 @@
 
 namespace App\Exceptions;
 
+use App\Traits\Response;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -34,8 +38,18 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function(Exception $e, $request) {
+            if ($e instanceof NotFoundHttpException) {
+                return Response::errorResponse('The specified resource cannot be  found!.', 404);
+            }
+            if ($e instanceof ModelNotFoundException) {
+                return Response::errorResponse('The specified resource cannot be  found!.', 404);
+            }
         });
+
+        $this->reportable(function (Throwable $e) {
+        });
+
+
     }
 }
