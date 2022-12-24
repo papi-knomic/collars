@@ -51,5 +51,10 @@ class JobController extends Controller
      return Response::successResponseWithData($job);
     }
 
+    public function search( Request $request ) : JsonResponse
+    {
+
+    }
+
 
 }

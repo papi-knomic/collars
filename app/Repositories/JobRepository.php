@@ -36,4 +36,9 @@ class JobRepository implements JobRepositoryInterface
     {
         return Job::where('id', $id)->update(['status' => $status]);
     }
+
+    public function filterJob($title = null, $description = null, $status = null)
+    {
+//       $jobQuery = Job::active()->where('name', 'LIKE', "%{$name}%");
+    }
 }

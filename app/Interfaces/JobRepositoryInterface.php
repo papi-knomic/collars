@@ -13,4 +13,6 @@ interface JobRepositoryInterface
     public function delete( int $id );
 
     public function changeStatus( int $id, string $status );
+
+    public function filterJob( $title = null, $description = null, $status = null );
 }
