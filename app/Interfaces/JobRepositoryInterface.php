@@ -19,4 +19,8 @@ interface JobRepositoryInterface
     public function changeStatus( int $id, string $status );
 
     public function filterJob( $title = null, $description = null, $status = null, $min = 0, $max = 0, $jobID = 0 );
+
+    public function activateJob( int $id );
+
+    public function deactivateJob( int $id );
 }

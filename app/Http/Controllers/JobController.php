@@ -51,7 +51,7 @@ class JobController extends Controller
     {
      $fields = $request->validated();
 
-     if ( auth()->id() != $job->user_id ){
+     if ( !checkJobCreator($job) ){
          return Response::errorResponse('You are not authorised to do this');
      }
 
@@ -69,6 +69,32 @@ class JobController extends Controller
         $jobID = $request->job_id;
         $jobs = $this->jobRepository->filterJob( $title, $description, $status, $min, $max, $jobID );
         return Response::successResponseWithData( $jobs, 'Jobs gotten');
+    }
+
+    public function activate( int $id ) : JsonResponse
+    {
+        $job = Job::find($id);
+        if ( !$job ) {
+            return Response::errorResponse('Job does not exist', 404 );
+        }
+        if ( !checkJobCreator($job) ){
+            return Response::errorResponse('You are not authorised to do this');
+        }
+        $this->jobRepository->activateJob( $id );
+        return  Response::successResponse('Job activated', 201 );
+    }
+
+    public function deactivate( int $id ) : JsonResponse
+    {
+        $job = Job::find($id);
+        if ( !$job ) {
+            return Response::errorResponse('Job does not exist', 404 );
+        }
+        if ( !checkJobCreator($job) ){
+            return Response::errorResponse('You are not authorised to do this');
+        }
+        $this->jobRepository->deactivateJob( $id );
+        return  Response::successResponse('Job deactivated', 201 );
     }
 
 

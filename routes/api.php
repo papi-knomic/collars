@@ -52,6 +52,10 @@ Route::group(['middleware' => ['json']], function () {
             Route::post('/', [JobController::class, 'store']);
             //update job
             Route::put('/{job}', [JobController::class, 'update']);
+            //activate job
+            Route::put('/activate/{id}', [JobController::class, 'activate']);
+            //deactivate job
+            Route::put('/deactivate/{id}', [JobController::class, 'deactivate']);
         });
 
 

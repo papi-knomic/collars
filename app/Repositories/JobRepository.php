@@ -77,4 +77,14 @@ class JobRepository implements JobRepositoryInterface
 
        return $jobQuery->get();
     }
+
+    public function activateJob(int $id)
+    {
+        return Job::where('id', $id)->update(['is_active' => true]);
+    }
+
+    public function deactivateJob(int $id)
+    {
+        return Job::where('id', $id)->update(['is_active' => false]);
+    }
 }

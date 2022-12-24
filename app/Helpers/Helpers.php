@@ -29,3 +29,10 @@ if ( !function_exists('generateJobSlug') ) {
         return $slug;
     }
 }
+
+if ( !function_exists('checkJobCreator') ) {
+    function checkJobCreator( Job $job): string
+    {
+        return auth()->id() == $job->user_id;
+    }
+}
