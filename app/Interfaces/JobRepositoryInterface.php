@@ -8,6 +8,8 @@ interface JobRepositoryInterface
 
     public function getActive();
 
+    public function getJob( int $id );
+
     public function create( array $data );
 
     public function update( int $id, array $data );
@@ -16,5 +18,5 @@ interface JobRepositoryInterface
 
     public function changeStatus( int $id, string $status );
 
-    public function filterJob( $title = null, $description = null, $status = null );
+    public function filterJob( $title = null, $description = null, $status = null, $min = 0, $max = 0, $jobID = 0 );
 }

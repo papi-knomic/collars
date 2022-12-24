@@ -35,6 +35,7 @@ class JobController extends Controller
         if ( !$job ) {
             return Response::errorResponse('Job not found');
         }
+        $job = $this->jobRepository->getJob( $job->id );
 
         return Response::successResponseWithData( $job );
     }
@@ -63,7 +64,10 @@ class JobController extends Controller
         $title = $request->title;
         $description = $request->description;
         $status = $request->status;
-        $jobs = $this->jobRepository->filterJob( $title, $description, $status );
+        $min = $request->min;
+        $max = $request->max;
+        $jobID = $request->job_id;
+        $jobs = $this->jobRepository->filterJob( $title, $description, $status, $min, $max, $jobID );
         return Response::successResponseWithData( $jobs, 'Jobs gotten');
     }
 
