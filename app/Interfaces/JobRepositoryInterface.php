@@ -6,6 +6,8 @@ interface JobRepositoryInterface
 {
     public function getAll();
 
+    public function getActive();
+
     public function create( array $data );
 
     public function update( int $id, array $data );

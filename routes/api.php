@@ -42,6 +42,8 @@ Route::group(['middleware' => ['json']], function () {
         Route::prefix('jobs')->group( function () {
             //get all
             Route::get('/', [ JobController::class, 'index' ] );
+            //get active jobs
+            Route::get('/active', [ JobController::class, 'activeJobs' ] );
             //get single job
             Route::get('/{job}', [JobController::class, 'show']);
             //create job

@@ -14,6 +14,11 @@ class JobRepository implements JobRepositoryInterface
         return Job::get();
     }
 
+    public function getActive()
+    {
+        return Job::isActive(1)->get();
+    }
+
     public function create(array $data)
     {
         return Job::create($data);

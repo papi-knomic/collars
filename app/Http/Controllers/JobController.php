@@ -24,6 +24,13 @@ class JobController extends Controller
         return Response::successResponseWithData( $jobs, 'Jobs gotten');
     }
 
+    public function activeJobs()
+    {
+        $jobs = $this->jobRepository->getActive();
+        return Response::successResponseWithData( $jobs, 'Jobs gotten');
+    }
+
+
     public function show( Job $job ) {
         if ( !$job ) {
             return Response::errorResponse('Job not found');
