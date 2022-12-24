@@ -60,7 +60,11 @@ class JobController extends Controller
 
     public function search( Request $request ) : JsonResponse
     {
-
+        $title = $request->title;
+        $description = $request->description;
+        $status = $request->status;
+        $jobs = $this->jobRepository->filterJob( $title, $description, $status );
+        return Response::successResponseWithData( $jobs, 'Jobs gotten');
     }
 
 
