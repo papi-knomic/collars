@@ -26,6 +26,11 @@ class Job extends Model
         return $this->belongsTo( JobType::class, 'job_id', 'id' );
     }
 
+    public function getIsOwnerAttribute() : bool
+    {
+        return auth()->id() == $this->user_id;;
+    }
+
     /**
      * @var mixed
      */

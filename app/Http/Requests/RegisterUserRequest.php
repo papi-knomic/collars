@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -28,10 +29,9 @@ class RegisterUserRequest extends FormRequest
             'last_name' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed',
-            'role' => 'required|string',
+            'role' => ['required','string', Rule::in(getUserRoles())],
             'location' => 'required|string',
             'job_type' => 'string',
-            'is_admin' => 'boolean'
         ];
     }
 }

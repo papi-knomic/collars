@@ -10,8 +10,7 @@ class JobRepository implements JobRepositoryInterface
 
     public function getAll()
     {
-//        return Job::orderBy('id')->paginate(5);
-        return Job::with('jobType')->paginate(5);
+        return Job::with('jobType')->paginate(10);
     }
 
     public function getActive()
@@ -49,32 +48,33 @@ class JobRepository implements JobRepositoryInterface
         return Job::where('id', $id)->update(['status' => $status]);
     }
 
-    public function filterJob($title = null, $description = null, $status = null, $min = 0, $max = 0, $jobID = 0 )
+    public function filterJob( array $filters )
     {
-       $jobQuery = Job::isActive(1)->where('title', 'LIKE', "%{$title}%")
-       ->with('jobType');
+       $jobQuery = Job::isActive(1)->with('jobType');
 
-       if ( $description ) {
-           $jobQuery->orWhere('description', 'LIKE', "%{$description}%");
+       if ( isset($filters['title'])) {
+           $jobQuery->where('title', 'LIKE', "%{$filters['title']}%");
+       }
+       if ( isset($filters['description']) ) {
+           $jobQuery->orWhere('description', 'LIKE', "%{$filters['description']}%");
        }
 
-        if ( $status ) {
-            $jobQuery->where('status', $status );
+        if ( isset($filters['status']) ) {
+            $jobQuery->whereStatus($filters['status'] );
         }
 
-        if ( $jobID ) {
-            $jobQuery->where('job_id', $jobID );
+        if ( isset($filters['job_id']) ) {
+            $jobQuery->whereJobId( $filters['job_id'] );
         }
-        if ( $min ) {
-            $jobQuery->where('price_range_min', '>=', $min );
+        if ( isset($filters['min']) ) {
+            $jobQuery->where('budget', '>=', $filters['min']  );
         }
 
-//        if ( $min && $max ) {
-//            $jobQuery->whereBetween('price_range_min', [$min, $] )
-//                ->orWhereBetween('price_range_max', $max);
-//        }
+        if ( isset($filters['min'])  && isset($filters['max'])  ) {
+            $jobQuery->whereBetween('budget', [$filters['min'], $filters['max'] ] );
+        }
 
-       return $jobQuery->get();
+       return $jobQuery->paginate(10);
     }
 
     public function activateJob(int $id)

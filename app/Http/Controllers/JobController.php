@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateJobRequest;
+use App\Http\Requests\SearchJobRequest;
 use App\Http\Resources\JobResource;
 use App\Models\Job;
 use App\Repositories\JobRepository;
@@ -62,16 +63,12 @@ class JobController extends Controller
      return Response::successResponseWithData($job);
     }
 
-    public function search( Request $request ) : JsonResponse
+    public function search( SearchJobRequest $request ) : JsonResponse
     {
-        $title = $request->title;
-        $description = $request->description;
-        $status = $request->status;
-        $min = $request->min;
-        $max = $request->max;
-        $jobID = $request->job_id;
-        $jobs = $this->jobRepository->filterJob( $title, $description, $status, $min, $max, $jobID );
-        return Response::successResponseWithData( $jobs, 'Jobs gotten');
+        $filters = $request->validated();
+        $jobs = $this->jobRepository->filterJob( $filters );
+        $jobsResource = JobResource::collection($jobs)->response()->getData(true);
+        return Response::successResponseWithData( $jobsResource, 'Jobs gotten');
     }
 
     public function activate( int $id ) : JsonResponse

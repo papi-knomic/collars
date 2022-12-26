@@ -18,16 +18,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'password',
-        'location',
-        'role',
-        'job_type',
-        'is_admin'
-    ];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,6 +38,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->role == 'admin';
+    }
+
+    public function getIsWorkerAttribute() : bool
+    {
+        return $this->role == 'worker';
+    }
+
+    public function getIsUserAttribute() : bool
+    {
+        return $this->role == 'user';
+    }
 
     public function jobs() : HasMany
     {

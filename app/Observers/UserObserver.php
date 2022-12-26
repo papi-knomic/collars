@@ -27,9 +27,6 @@ class UserObserver
      */
     public function creating(User $user)
     {
-        if ( empty($user->is_admin) ) {
-            $user->is_admin = false;
-        }
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Traits\Response;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -44,6 +45,9 @@ class Handler extends ExceptionHandler
             }
             if ($e instanceof ModelNotFoundException) {
                 return Response::errorResponse('The specified resource cannot be  found!.', 404);
+            }
+            if ($e instanceof  AccessDeniedHttpException) {
+                return Response::errorResponse('You are not authorised to do this');
             }
         });
 
