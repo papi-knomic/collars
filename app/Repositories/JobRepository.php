@@ -10,8 +10,8 @@ class JobRepository implements JobRepositoryInterface
 
     public function getAll()
     {
-//        return Job::orderBy('id)->paginate(10);
-        return Job::with('jobType')->get();
+//        return Job::orderBy('id')->paginate(5);
+        return Job::with('jobType')->paginate(5);
     }
 
     public function getActive()
@@ -65,15 +65,14 @@ class JobRepository implements JobRepositoryInterface
         if ( $jobID ) {
             $jobQuery->where('job_id', $jobID );
         }
-
         if ( $min ) {
-            $jobQuery->whereBetween('price_range_min', '>=', $min );
+            $jobQuery->where('price_range_min', '>=', $min );
         }
 
-        if ( $max ) {
-            $jobQuery->where('price_range_max', '<=', $max );
-//                ->orWhere('price_range_max', '>=', $max);
-        }
+//        if ( $min && $max ) {
+//            $jobQuery->whereBetween('price_range_min', [$min, $] )
+//                ->orWhereBetween('price_range_max', $max);
+//        }
 
        return $jobQuery->get();
     }

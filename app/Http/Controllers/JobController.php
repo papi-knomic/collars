@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateJobRequest;
+use App\Http\Resources\JobResource;
 use App\Models\Job;
 use App\Repositories\JobRepository;
 use App\Repositories\JobTypeRepository;
@@ -21,7 +22,9 @@ class JobController extends Controller
 
     public function index() {
         $jobs = $this->jobRepository->getAll();
-        return Response::successResponseWithData( $jobs, 'Jobs gotten');
+        $jobsResource = JobResource::collection($jobs)->response()->getData(true);
+        return Response::successResponseWithData( $jobsResource, 'Jobs gotten');
+
     }
 
     public function activeJobs()

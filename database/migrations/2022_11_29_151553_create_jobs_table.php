@@ -24,7 +24,6 @@ class CreateJobsTable extends Migration
             $table->string('status');
             $table->text('images')->nullable();
             $table->text('slug');
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
 
         });
