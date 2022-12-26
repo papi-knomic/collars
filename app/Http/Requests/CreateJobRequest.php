@@ -14,7 +14,7 @@ class CreateJobRequest extends FormRequest
      */
     public function authorize()
     {
-        if( auth()->user()->is_user){
+        if( auth()->user()->is_user ){
             return true;
         }
 
