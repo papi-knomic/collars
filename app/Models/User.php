@@ -54,6 +54,15 @@ class User extends Authenticatable
         return $this->role == 'user';
     }
 
+    public function getIsVerifiedAttribute(): string
+    {
+
+        if (!empty($this->email_verified_at)) {
+            return 'verified';
+        }
+        return 'unverified';
+    }
+
     public function jobs() : HasMany
     {
         return $this->hasMany( Job::class, 'user_id', 'id');
