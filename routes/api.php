@@ -39,6 +39,9 @@ Route::group(['middleware' => ['json']], function () {
             Route::get('/profile', [AuthController::class, 'profile']);
         });
 
+        //get all job types
+        Route::get('/job-type', [JobTypeController::class, 'index']);
+
         Route::prefix('jobs')->group( function () {
             //get all
             Route::get('/', [ JobController::class, 'index' ] );
@@ -48,21 +51,21 @@ Route::group(['middleware' => ['json']], function () {
             Route::get('/search', [JobController::class, 'search']);
             //get single job
             Route::get('/{job}', [JobController::class, 'show']);
-            //create job
-            Route::post('/', [JobController::class, 'store']);
-            //update job
-            Route::put('/{job}', [JobController::class, 'update']);
-            //activate job
-            Route::put('/activate/{id}', [JobController::class, 'activate']);
-            //deactivate job
-            Route::put('/deactivate/{id}', [JobController::class, 'deactivate']);
+            Route::middleware('user')->group( function () {
+                //create job
+                Route::post('/', [JobController::class, 'store']);
+                //update job
+                Route::put('/{job}', [JobController::class, 'update']);
+                //activate job
+                Route::put('/activate/{id}', [JobController::class, 'activate']);
+                //deactivate job
+                Route::put('/deactivate/{id}', [JobController::class, 'deactivate']);
+            });
         });
 
 
         //admin prefix
-        Route::prefix('admin')->group( function () {
-            //get all job types
-            Route::get('/job-type', [JobTypeController::class, 'index']);
+        Route::prefix('admin')->middleware('admin')->group( function () {
             //create job type
             Route::post('/job-type', [JobTypeController::class, 'store']);
             //update job type
