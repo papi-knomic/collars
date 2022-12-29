@@ -11,7 +11,7 @@ class VerificationCodeController extends Controller
 {
     private $verificationRepository;
 
-    public function __construct( VerificationCodeRepository $verificationRepository) {
+    public function __construct(VerificationCodeRepository $verificationRepository) {
         $this->verificationRepository = $verificationRepository;
     }
 

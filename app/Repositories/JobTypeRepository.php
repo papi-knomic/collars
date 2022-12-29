@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\JobTypeInterface;
+use App\Interfaces\JobTypeRepositoryInterface;
 use App\Models\JobType;
 
-class JobTypeRepository implements JobTypeInterface
+class JobTypeRepository implements JobTypeRepositoryInterface
 {
 
     public function create(array $data)

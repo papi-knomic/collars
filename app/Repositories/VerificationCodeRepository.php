@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\VerificationCodeInterface;
+use App\Interfaces\VerificationCodeRepositoryInterface;
 use App\Mail\Verification;
 use App\Models\VerificationCode;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
-class VerificationCodeRepository implements VerificationCodeInterface
+class VerificationCodeRepository implements VerificationCodeRepositoryInterface
 {
 
     /**

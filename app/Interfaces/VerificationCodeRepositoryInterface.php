@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface VerificationCodeInterface
+interface VerificationCodeRepositoryInterface
 {
     public function sendVerificationCode( string $email );
 

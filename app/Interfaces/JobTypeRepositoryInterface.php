@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface JobTypeInterface
+interface JobTypeRepositoryInterface
 {
     public function getAll();
 

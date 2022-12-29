@@ -12,7 +12,7 @@ class JobTypeController extends Controller
 {
     private $jobTypeRepository;
 
-    public function __construct( JobTypeRepository $jobTypeRepository ) {
+    public function __construct(JobTypeRepository $jobTypeRepository ) {
         $this->jobTypeRepository = $jobTypeRepository;
     }
 
