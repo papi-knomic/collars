@@ -41,7 +41,9 @@ Route::group(['middleware' => ['json']], function () {
         });
 
         //get all job types
-        Route::get('/job-types', [JobTypeController::class, 'index']);
+        Route::get('/job_types', [JobTypeController::class, 'index']);
+
+        Route::get('job/{job}/offers', [JobOfferController::class, 'getForJob']);
 
         Route::prefix('jobs')->group( function () {
             //get all
@@ -69,27 +71,25 @@ Route::group(['middleware' => ['json']], function () {
         //admin prefix
         Route::prefix('admin')->middleware('admin')->group( function () {
             //create job type
-            Route::post('/job-types', [JobTypeController::class, 'store']);
-            //update job type
-            Route::put('/job-types/{jobType}', [JobTypeController::class, 'update']);
-            //delete job type
-            Route::delete('/job-types/{jobType}', [JobTypeController::class, 'delete']);
+            Route::prefix('job_types')->group( function () {
+
+                Route::post('/', [JobTypeController::class, 'store']);
+                //update job type
+                Route::put('/{jobType}', [JobTypeController::class, 'update']);
+                //delete job type
+                Route::delete('/{jobType}', [JobTypeController::class, 'delete']);
+            });
         });
 
         Route::prefix('job-offers')->group( function () {
             //get single offer
             Route::get('/{jobOffer}', [JobOfferController::class, 'show']);
-            //all job offer endpoints for user
-            Route::middleware('user')->group(function () {
-                Route::get('/job/{job}', [JobOfferController::class, 'getForJob']);
-            });
-            //
+            //All workers route for job offer
             Route::middleware('worker')->group(function () {
                 //Get job offers
                 Route::get('/', [JobOfferController::class, 'index']);
                 //Create job offer
                 Route::post('/', [JobOfferController::class, 'store']);
-
             });
 
 

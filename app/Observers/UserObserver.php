@@ -3,9 +3,14 @@
 namespace App\Observers;
 
 use App\Http\Controllers\VerificationCodeController;
+use App\Mail\Verification;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\VerificationCode;
+use App\Notifications\EmailVerificationNotification;
 use App\Repositories\VerificationCodeRepository;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -20,7 +25,7 @@ class UserObserver
      */
     public function created(User $user)
     {
-        ( new VerificationCodeRepository() )->sendVerificationCode($user->email);
+        $this->generateUserVerificationCode($user->email);
     }
 
     /**
@@ -75,5 +80,24 @@ class UserObserver
     public function forceDeleted(User $user)
     {
         //
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function generateUserVerificationCode(string $email ) {
+        $code = generateVerificationCodeForUser($email);
+        $firstname = getUserFirstNameFromEmail($email);
+
+        $details = [
+            'subject' => 'Verify Email Address',
+            'message' => 'Your verification code: :code',
+            'code' => $code,
+            'firstname' => $firstname
+        ];
+
+        Notification::route('mail', $email)
+            ->notify(new EmailVerificationNotification($details));
+
     }
 }
