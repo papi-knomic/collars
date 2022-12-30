@@ -8,7 +8,9 @@ interface JobOfferRepositoryInterface
 
     public function update( array $data );
 
-    public function getOffers( int $jobID );
+    public function getOffersForJob( int $jobID );
+
+    public function getWorkerOffers( int $workerID );
 
     public function getOffer( int $offerID );
 

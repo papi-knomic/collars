@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobOfferController;
 use App\Http\Controllers\JobTypeController;
 use App\Traits\Response;
 use Illuminate\Http\Request;
@@ -40,7 +41,7 @@ Route::group(['middleware' => ['json']], function () {
         });
 
         //get all job types
-        Route::get('/job-type', [JobTypeController::class, 'index']);
+        Route::get('/job-types', [JobTypeController::class, 'index']);
 
         Route::prefix('jobs')->group( function () {
             //get all
@@ -51,6 +52,7 @@ Route::group(['middleware' => ['json']], function () {
             Route::get('/search', [JobController::class, 'search']);
             //get single job
             Route::get('/{job}', [JobController::class, 'show']);
+
             Route::middleware('user')->group( function () {
                 //create job
                 Route::post('/', [JobController::class, 'store']);
@@ -67,11 +69,31 @@ Route::group(['middleware' => ['json']], function () {
         //admin prefix
         Route::prefix('admin')->middleware('admin')->group( function () {
             //create job type
-            Route::post('/job-type', [JobTypeController::class, 'store']);
+            Route::post('/job-types', [JobTypeController::class, 'store']);
             //update job type
-            Route::put('/job-type/{jobType}', [JobTypeController::class, 'update']);
+            Route::put('/job-types/{jobType}', [JobTypeController::class, 'update']);
             //delete job type
-            Route::delete('/job-type/{jobType}', [JobTypeController::class, 'delete']);
+            Route::delete('/job-types/{jobType}', [JobTypeController::class, 'delete']);
+        });
+
+        Route::prefix('job-offers')->group( function () {
+            //get single offer
+            Route::get('/{jobOffer}', [JobOfferController::class, 'show']);
+            //all job offer endpoints for user
+            Route::middleware('user')->group(function () {
+                Route::get('/job/{job}', [JobOfferController::class, 'getForJob']);
+            });
+            //
+            Route::middleware('worker')->group(function () {
+                //Get job offers
+                Route::get('/', [JobOfferController::class, 'index']);
+                //Create job offer
+                Route::post('/', [JobOfferController::class, 'store']);
+
+            });
+
+
+
         });
 
         //logout

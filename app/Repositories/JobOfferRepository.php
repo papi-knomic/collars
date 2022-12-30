@@ -3,13 +3,14 @@
 namespace App\Repositories;
 
 use App\Interfaces\JobOfferRepositoryInterface;
+use App\Models\JobOffer;
 
 class JobOfferRepository implements JobOfferRepositoryInterface
 {
 
     public function create(array $data)
     {
-        // TODO: Implement create() method.
+       return JobOffer::create($data);
     }
 
     public function update(array $data)
@@ -17,9 +18,14 @@ class JobOfferRepository implements JobOfferRepositoryInterface
         // TODO: Implement update() method.
     }
 
-    public function getOffers(int $jobID)
+    public function getOffersForJob(int $jobID)
     {
-        // TODO: Implement getOffers() method.
+        return JobOffer::where('job_id', $jobID)->paginate(10);
+    }
+
+    public function getWorkerOffers(int $workerID)
+    {
+        return JobOffer::where('worker_id', $workerID)->paginate(10);
     }
 
     public function getOffer(int $offerID)
