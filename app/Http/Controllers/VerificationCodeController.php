@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ResendVerificationCodeRequest;
 use App\Http\Requests\VerifyEmailRequest;
 use App\Jobs\ResendVerificationCodeJob;
+use App\Jobs\ResetPasswordJob;
 use App\Models\User;
 use App\Models\VerificationCode;
 use App\Repositories\JobRepository;
@@ -91,6 +92,30 @@ class VerificationCodeController extends Controller
 
         return Response::successResponse('Verification code resent');
 
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function requestPasswordResetCode(ResendVerificationCodeRequest $request ) : JsonResponse
+    {
+        $data = $request->validated();
+        $user = User::whereEmail($data['email'])->first();
+        $code = generateVerificationCodeForUser($user->email);
+
+        if (!$user) {
+            return Response::errorResponse('Invalid details');
+        }
+        $details = [
+            'code' => $code,
+            'subject' => 'Reset Password',
+            'body' => 'This is the code to reset your password',
+            'email' => $user->email
+        ];
+
+        ResetPasswordJob::dispatchAfterResponse($details);
+
+        return Response::successResponse('Reset code has been sent to email');
     }
 
     public static function verify($code, $email): bool
