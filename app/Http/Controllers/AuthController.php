@@ -31,9 +31,6 @@ class AuthController extends Controller
     public function register( RegisterUserRequest $request ): JsonResponse
     {
         $fields = $request->validated();
-        if( $fields['role'] == 'worker' && empty( $fields['job_type'] ) ){
-            return Response::errorResponse('Worker accounts must have job type');
-        }
         $user = $this->userRepository->create($fields);
 
         return Response::successResponseWithData($user, 'Successful!, check your mail for verification code' );
@@ -50,7 +47,8 @@ class AuthController extends Controller
         $userData = $request->validated();
 
         if (Auth::attempt($userData)) {
-            $accessToken = Auth::user()->createToken(env('TOKEN'))->plainTextToken;
+            $token = config('keys.token');
+            $accessToken = Auth::user()->createToken($token)->plainTextToken;
             $data = auth()->user();
             return Response::successResponseWithData($data, 'Login successful', 200, $accessToken);
         }
@@ -72,7 +70,8 @@ class AuthController extends Controller
 
     public function profile( Request $request ): JsonResponse
     {
-        $accessToken = Auth::user()->createToken(env('TOKEN'))->plainTextToken;
+        $token = config('keys.token');
+        $accessToken = Auth::user()->createToken($token)->plainTextToken;
         $data = auth()->user();
         return Response::successResponseWithData($data, 'Profile data gotten', 200, $accessToken);
     }

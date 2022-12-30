@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EmailVerificationNotification extends Notification implements ShouldQueue
+class WelcomeMailNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -18,7 +18,7 @@ class EmailVerificationNotification extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(array $details)
+    public function __construct( array $details)
     {
         $this->details = $details;
     }
@@ -42,13 +42,10 @@ class EmailVerificationNotification extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $code = $this->details['code'];
-        $firstname = $this->details['firstname'];
         return (new MailMessage)
-                    ->subject($this->details['subject'])
-                    ->line("Welcome to Collars, <b>$firstname</b>")
-                    ->line("Please verify your account with this code")
-                    ->line("<b>$code</b>")
+            ->subject($this->details['subject'])
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
 

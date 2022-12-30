@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImagesColumnToJobsTable extends Migration
+class AddBvnColumToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddImagesColumnToJobsTable extends Migration
      */
     public function up()
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->text('images');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('bvn')->nullable()->unique();
+            $table->timestamp('bvn_verified_at')->nullable();
         });
     }
 
@@ -25,8 +26,9 @@ class AddImagesColumnToJobsTable extends Migration
      */
     public function down()
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->removeColumn('images');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('bvn');
+            $table->dropColumn('bvn_verified_at');
         });
     }
 }

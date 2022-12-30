@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\VerificationCode;
 use App\Notifications\EmailVerificationNotification;
+use App\Notifications\WelcomeMailNotification;
 use App\Repositories\VerificationCodeRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -46,7 +47,18 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        //
+        $emailWasVerified = $user->wasChanged('email_verified_at');
+
+        if ($emailWasVerified) {
+            $firstname = $user->firstname;
+
+            $data = [
+                'subject' => "Welcome to Collars {$firstname}",
+                'firstname' => $firstname
+            ];
+
+            Notification::route('mail', $user->email)->notify((new WelcomeMailNotification($data)));
+        }
     }
 
     /**

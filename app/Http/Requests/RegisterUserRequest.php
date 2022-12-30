@@ -31,7 +31,8 @@ class RegisterUserRequest extends FormRequest
             'password' => 'required|string|confirmed',
             'role' => ['required','string', Rule::in(getUserRoles())],
             'location' => 'required|string',
-            'job_type' => 'string',
+            'job_type' => ["required_if:role,==,worker",'exists:job_types,id'],
+            'bvn' => ['string', 'unique:users,bvn', "required_if:role,==,worker"]
         ];
     }
 }
