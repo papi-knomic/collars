@@ -46,9 +46,9 @@ class EmailVerificationNotification extends Notification implements ShouldQueue
         $firstname = $this->details['firstname'];
         return (new MailMessage)
                     ->subject($this->details['subject'])
-                    ->line("Welcome to Collars, <b>$firstname</b>")
+                    ->line("Welcome to Collars, $firstname")
                     ->line("Please verify your account with this code")
-                    ->line("<b>$code</b>")
+                    ->line("$code")
                     ->line('Thank you for using our application!');
     }
 
