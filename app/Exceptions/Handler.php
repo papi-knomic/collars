@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -48,6 +49,10 @@ class Handler extends ExceptionHandler
             }
             if ($e instanceof  AccessDeniedHttpException) {
                 return Response::errorResponse('You are not authorised to do this');
+            }
+            if ($e instanceof  HttpException) {
+                $message = $e->getMessage();
+                return Response::errorResponse($message);
             }
         });
 

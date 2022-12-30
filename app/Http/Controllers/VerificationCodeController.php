@@ -9,6 +9,7 @@ use App\Models\VerificationCode;
 use App\Repositories\JobRepository;
 use App\Repositories\VerificationCodeRepository;
 use App\Traits\Response;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,22 +23,41 @@ class VerificationCodeController extends Controller
 
 
     public function verifyEmail( VerifyEmailRequest $request ) {
+
+
         $data = $request->validated();
 
+        $user = User::whereEmail($data['email'])->first();
         $code = VerificationCode::where('verifiable', $data['email'])->first();
+        $invalidResponse = Response::errorResponse('Invalid code!');
+
+        if (!$user) {
+            return Response::errorResponse('Invalid details');
+        }
+
+        auth()->loginUsingId($user->id);
+
+        if ($request->user()->hasVerifiedEmail()) {
+            return Response::successResponse('Already verified', 200);
+        }
 
         if (!$code) {
-            return Response::errorResponse('Invalid code!', 403);
+            return $invalidResponse;
         }
 
         if ($code->expires_at < now()) {
-            return Response::errorResponse('Invalid code!', 403);
+            return $invalidResponse;
         }
 
         $verify = $this::verify( $data['code'], $data['email'] );
 
-        dd( $verify);
+        if (!$verify ) {
+            return $invalidResponse;
+        }
 
+        $request->user()->markEmailAsVerified();
+
+        return Response::successResponse('Verification successful', 200);
     }
 
     public function resendVerificationCode( ResendVerificationCodeRequest $request ) {
