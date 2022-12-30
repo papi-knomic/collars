@@ -13,7 +13,7 @@ class ResendVerificationCodeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class ResendVerificationCodeRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'email' => ['required','exists:users,email', 'exists:verification_codes,verifiable'],
         ];
     }
 }

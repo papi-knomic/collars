@@ -7,18 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ResendVerificationCodeMailNotification extends Notification
+class ResendVerificationCodeMailNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    private $details;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct( array $details )
     {
-        //
+        $this->details = $details;
     }
 
     /**
@@ -36,14 +38,18 @@ class ResendVerificationCodeMailNotification extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {
+        $code = $this->details['code'];
+        $firstname = $this->details['firstname'];
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject($this->details['subject'])
+            ->line("Welcome to Collars, $firstname")
+            ->line("Please verify your account with this code")
+            ->line("$code")
+            ->line('Thank you for using our application!');
     }
 
     /**

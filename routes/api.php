@@ -45,7 +45,7 @@ Route::group(['middleware' => ['json']], function () {
 
         Route::middleware('verified')->group( function () {
             //get all job types
-            Route::get('/job_types', [JobTypeController::class, 'index']);
+            Route::get('/job-types', [JobTypeController::class, 'index']);
 
             Route::get('job/{job}/offers', [JobOfferController::class, 'getForJob']);
 
@@ -75,7 +75,7 @@ Route::group(['middleware' => ['json']], function () {
             //admin prefix
             Route::prefix('admin')->middleware('admin')->group( function () {
                 //create job type
-                Route::prefix('job_types')->group( function () {
+                Route::prefix('job-types')->group( function () {
 
                     Route::post('/', [JobTypeController::class, 'store']);
                     //update job type

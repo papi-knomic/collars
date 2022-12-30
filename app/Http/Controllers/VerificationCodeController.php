@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ResendVerificationCodeRequest;
 use App\Http\Requests\VerifyEmailRequest;
+use App\Jobs\ResendVerificationCodeJob;
 use App\Models\User;
 use App\Models\VerificationCode;
 use App\Repositories\JobRepository;
 use App\Repositories\VerificationCodeRepository;
 use App\Traits\Response;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,8 +25,6 @@ class VerificationCodeController extends Controller
 
 
     public function verifyEmail( VerifyEmailRequest $request ) {
-
-
         $data = $request->validated();
 
         $user = User::whereEmail($data['email'])->first();
@@ -60,7 +60,36 @@ class VerificationCodeController extends Controller
         return Response::successResponse('Verification successful', 200);
     }
 
-    public function resendVerificationCode( ResendVerificationCodeRequest $request ) {
+    /**
+     * @throws \Exception
+     */
+    public function resendVerificationCode(ResendVerificationCodeRequest $request ): JsonResponse
+    {
+        $data = $request->validated();
+        $user = User::whereEmail($data['email'])->first();
+
+        if (!$user) {
+            return Response::errorResponse('Invalid details');
+        }
+
+        auth()->loginUsingId($user->id);
+
+        if ($request->user()->hasVerifiedEmail()) {
+            return Response::successResponse('Already verified', 200);
+        }
+
+        $code = generateVerificationCodeForUser($user->email);
+        $firstname = getUserFirstNameFromEmail($user->email);
+        $details = [
+            'code' => $code,
+            'firstname' => $firstname,
+            'subject' => "Verify Email",
+            'email' => $user->email
+        ];
+
+        ResendVerificationCodeJob::dispatchAfterResponse( $details );
+
+        return Response::successResponse('Verification code resent');
 
     }
 
