@@ -44,7 +44,7 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                     ->subject($this->details['subject'])
-                    ->line($this->details['subject'])
+                    ->line($this->details['body'])
                     ->line($this->details['code'])
                     ->line('Thank you for using our application!');
     }

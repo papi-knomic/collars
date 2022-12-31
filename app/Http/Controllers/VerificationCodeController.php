@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RequestResetPasswordRequest;
 use App\Http\Requests\ResendVerificationCodeRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\VerifyEmailRequest;
 use App\Jobs\ResendVerificationCodeJob;
 use App\Jobs\ResetPasswordJob;
@@ -12,6 +14,7 @@ use App\Repositories\JobRepository;
 use App\Repositories\VerificationCodeRepository;
 use App\Traits\Response;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -97,7 +100,7 @@ class VerificationCodeController extends Controller
     /**
      * @throws \Exception
      */
-    public function requestPasswordResetCode(ResendVerificationCodeRequest $request ) : JsonResponse
+    public function requestPasswordResetCode(RequestResetPasswordRequest $request ) : JsonResponse
     {
         $data = $request->validated();
         $user = User::whereEmail($data['email'])->first();
@@ -116,6 +119,27 @@ class VerificationCodeController extends Controller
         ResetPasswordJob::dispatchAfterResponse($details);
 
         return Response::successResponse('Reset code has been sent to email');
+    }
+
+    public function resetPassword(ResetPasswordRequest $request ) : JsonResponse
+    {
+        $data = $request->validated();
+        $user = User::whereEmail($data['email'])->first();
+
+        if (!$user) {
+            return Response::errorResponse('Invalid details');
+        }
+
+        $verify = $this::verify( $data['code'], $data['email'] );
+
+        if ( ! $verify ){
+            return Response::errorResponse('Invalid details');
+        }
+        $details['password'] = bcrypt($data['password']);
+
+        User::whereId($user->id)->update($details);
+
+        return Response::successResponse('Password successfully reset');
     }
 
     public static function verify($code, $email): bool
