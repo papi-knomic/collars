@@ -32,7 +32,8 @@ class RegisterUserRequest extends FormRequest
             'role' => ['required','string', Rule::in(getUserRoles())],
             'location' => 'required|string',
             'job_type' => ["required_if:role,==,worker",'exists:job_types,id'],
-            'bvn' => ['string', 'unique:users,bvn', "required_if:role,==,worker"]
+            'phone' => ["required", 'unique:users,phone', 'regex:^0(70|8(0|1)|9(0|1))\d{8}$"']
+//            'bvn' => ['string', 'unique:users,bvn', "required_if:role,==,worker"]
         ];
     }
 }

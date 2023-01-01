@@ -10,14 +10,14 @@ class JobRepository implements JobRepositoryInterface
 
     public function getAll()
     {
-        return Job::with('jobType')->paginate(10);
+        return Job::with( 'jobType', 'jobOffers' )->paginate(10);
     }
 
     public function getActive()
     {
         return Job::isActive(1)
-            ->with('jobType')
-            ->get();
+            ->with('jobType', 'jobOffers')
+            ->paginate(10);
     }
 
     public function getJob( int $id )

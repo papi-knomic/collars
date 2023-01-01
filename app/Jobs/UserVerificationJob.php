@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Flutterwave\Flutterwave;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class UserBVNVerificationJob implements ShouldQueue
+class UserVerificationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,5 +32,9 @@ class UserBVNVerificationJob implements ShouldQueue
     public function handle()
     {
         //
+    }
+
+    private function verifyBVN()
+    {
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobResource extends JsonResource
@@ -10,7 +11,7 @@ class JobResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @return array|Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
@@ -27,7 +28,8 @@ class JobResource extends JsonResource
             "slug" => $this->slug,
             "is_active" => $this->is_active,
             "budget" => $this->budget,
-            "job_type" => new JobTypeResource($this->jobType)
+            "job_type" => new JobTypeResource($this->jobType),
+            "job_offers" =>  JobOfferResource::collection( $this->whenLoaded('jobOffers'))
         ];
     }
 }

@@ -61,7 +61,7 @@ class VerificationCodeController extends Controller
 
         $request->user()->markEmailAsVerified();
 
-        return Response::successResponse('Verification successful', 200);
+        return Response::successResponseWithData($user,'Verification successful', 200);
     }
 
     /**

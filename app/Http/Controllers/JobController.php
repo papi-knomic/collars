@@ -31,7 +31,8 @@ class JobController extends Controller
     public function activeJobs()
     {
         $jobs = $this->jobRepository->getActive();
-        return Response::successResponseWithData( $jobs, 'Jobs gotten');
+        $jobsResource = JobResource::collection($jobs)->response()->getData(true);
+        return Response::successResponseWithData( $jobsResource, 'Jobs gotten');
     }
 
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Job extends Model
 {
@@ -24,6 +25,11 @@ class Job extends Model
     public function jobType() : BelongsTo
     {
         return $this->belongsTo( JobType::class, 'job_id', 'id' );
+    }
+
+    public function jobOffers () : HasMany
+    {
+        return $this->hasMany(JobOffer::class, 'job_id', 'id');
     }
 
     public function getIsOwnerAttribute() : bool
